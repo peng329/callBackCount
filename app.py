@@ -24,8 +24,8 @@ def click():
 
 @app.route('/reset', methods=['POST'])
 def reset():
-    # 歸零
-    db.set('click_count', 0)
+    # 歸零。因為歸零後還會再載入頁面，所以參數數字要改為 -1
+    db.set('click_count', -1)
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
