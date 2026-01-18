@@ -1,26 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>管理</title>
+    <title>管理系統</title>
+    <meta charset="UTF-8">
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 50px; background-color: #f8f9fa; }
-        .admin-box { border: 2px solid #dee2e6; display: inline-block; padding: 20px; border-radius: 10px; background: white; }
-        .btn-reset { background-color: #e74c3c; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
-        .btn-click { background-color: #3498db; color: white; border: none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin-top: 50px; background-color: #f0f2f5; }
+        .admin-box { 
+            border: none; 
+            display: inline-block; 
+            padding: 40px; 
+            border-radius: 20px; 
+            background: white; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .count-display { 
+            font-size: 72px; 
+            margin: 20px 0; 
+            color: #2c3e50; 
+            font-weight: bold;
+        }
+        .btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+            transition: opacity 0.2s;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { opacity: 0.8; }
+        
+        /* 重新整理按鈕：藍色 */
+        .btn-refresh { background-color: #3498db; color: white; }
+        
+        /* 歸零按鈕：紅色 */
+        .btn-reset { background-color: #e74c3c; color: white; }
+        
+        .status-tag {
+            font-size: 14px;
+            color: #27ae60;
+            background: #eafaf1;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="admin-box">
+        <span class="status-tag">● 即時監控模式 (不計入次數)</span>
         <h2>📊 callback頁面瀏覽累計次數</h2>
-        <div style="font-size: 48px; margin: 20px;">{{ count }}</div>
         
-        <form action="/reset" method="post">
-            <button type="submit" class="btn-reset" onclick="return confirm('確定要歸零嗎？')">歸零計數器</button>
+        <div class="count-display">{{ count }}</div>
+        
+        <button onclick="window.location.reload();" class="btn btn-refresh">
+            🔄 重新整理數據
+        </button>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <form action="/reset" method="post" onsubmit="return confirm('警告：這將清空所有點擊紀錄，確定嗎？')">
+            <button type="submit" class="btn btn-reset">🗑️ 歸零計數器</button>
         </form>
-		
-		<button onclick="location.reload();" class="btn-refresh">重新整理(讀取最新數字)</button>
-		
-        <p><a href="/callback">回首頁測試 (會增加次數)</a></p>
+        
+        <div style="margin-top: 20px;">
+            <a href="/" target="_blank" style="color: #7f8c8d; font-size: 14px;">開啟前台頁面 (會增加次數) ↗</a>
+        </div>
     </div>
+
+    <script>
+        // 【選配】如果想要每 30 秒自動刷新一次，可以取消下面這行的註解
+        // setInterval(function(){ window.location.reload(); }, 30000);
+    </script>
 </body>
 </html>
