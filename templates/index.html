@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>點擊計數器</title>
+    <title>自動計數器</title>
     <style>
         body { font-family: sans-serif; text-align: center; margin-top: 50px; }
         .count { font-size: 48px; color: #2c3e50; }
@@ -11,12 +11,10 @@
     </style>
 </head>
 <body>
-    <h1>網頁點擊計數器</h1>
+    <h1>本網頁累計瀏覽次數</h1>
     <div class="count">{{ count }}</div>
     
-    <form action="/click" method="post" style="display: inline;">
-        <button type="submit" class="btn-click">點擊！</button>
-    </form>
+    <button onclick="location.reload();" class="btn-refresh">重新整理 (加1)</button>
 
     <form action="/reset" method="post" style="display: inline;">
         <button type="submit" class="btn-reset">歸零</button>
