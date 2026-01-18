@@ -2,31 +2,32 @@ import os
 from flask import Flask, render_template, redirect, url_for
 import redis
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
-# 連接 Redis (Render 會提供環境變數 REDIS_URL)
+# 連接 Redis
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
 db = redis.from_url(redis_url, decode_responses=True)
 
-@app.route('/')
+# --- 頁面 1：主要計數頁面 ---
+@app.route('/callback')
 def index():
-    # --- 核心邏輯調整 ---
-    # 每當有人進入此路由（載入頁面），Redis 中的次數就自動加 1
-    # 如果 click_count 不存在，db.incr 會自動從 0 開始加到 1
-    new_count = db.incr('click_count') 
-    return render_template('index.html', count=new_count)
+    # 載入就加 1
+    new_count = db.incr('click_count')
+    return render_template('callback.html', count=new_count)
 
-@app.route('/click', methods=['POST'])
-def click():
-    # 次數加 1
-    db.incr('click_count')
-    return redirect(url_for('index'))
+# --- 頁面 2：管理/查看頁面 ---
+@app.route('/admin')
+def admin():
+    # 只讀取，不增加次數
+    current_count = db.get('click_count') or 0
+    return render_template('admin.html', count=current_count)
 
+# 歸零功能：由管理頁發起
 @app.route('/reset', methods=['POST'])
 def reset():
-    # 歸零。因為歸零後還會再載入頁面，所以參數數字要改為 -1
-    db.set('click_count', -1)
-    return redirect(url_for('index'))
+    db.set('click_count', 0)
+    # 歸零後回到管理頁，這樣就不會觸發首頁的 incr
+    return redirect(url_for('admin'))
 
 if __name__ == '__main__':
     app.run(debug=True)

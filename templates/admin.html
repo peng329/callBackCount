@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>後台管理</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; background-color: #f8f9fa; }
+        .admin-box { border: 2px solid #dee2e6; display: inline-block; padding: 20px; border-radius: 10px; background: white; }
+        .btn-reset { background-color: #e74c3c; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="admin-box">
+        <h2>📊 目前callback累計次數</h2>
+        <div style="font-size: 48px; margin: 20px;">{{ count }}</div>
+        
+        <form action="/reset" method="post">
+            <button type="submit" class="btn-reset" onclick="return confirm('確定要歸零嗎？')">歸零計數器</button>
+        </form>
+        <p><a href="/callback">回首頁測試 (會增加次數)</a></p>
+    </div>
+</body>
+</html>
